@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<section class="breadcrumbs-custom">
+    <div class="parallax-container" data-parallax-img="images/breadcrumbs-bg.jpg">
+      <div class="breadcrumbs-custom-body parallax-content context-dark darken-overlay">
+        <div class="container">
+          <h2 class="breadcrumbs-custom-title">{{food.name}}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="breadcrumbs-custom-footer">
+      <div class="container">
+        <ul class="breadcrumbs-custom-path">
+          <li><a href="{% url 'food:index' %}">Asosiy</a></li>
+          <li><a href="grid-shop.html">Do'kon</a></li>
+          <li class="active">Joy</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- Single Product-->
+  <section class="section section-sm section-first bg-default">
+    <div class="container">
+      <div class="row row-30">
+        <div class="col-lg-6">
+          <div class="slick-vertical slick-product">
+            <!-- Slick Carousel-->
+            <div class="slick-slider carousel-parent" id="carousel-parent" data-items="1" data-swipe="true" data-child="#child-carousel" data-for="#child-carousel">
+              <div class="item">
+                <div class="slick-product-figure"><img src="{{food.place_image.url}}" alt="" width="530" height="480">
+                </div>
+              </div>
+              
+             
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="single-product">
+            <h3 class="text-transform-none fw-medium">{{food.name}}</h3>
+            <div class="group-md group-middle">
+              <div class="single-product-price">{{food.address}}</div>
+            </div>
+            <p>{{food.description}}</p>
+            <hr class="hr-gray-100">
+           
+            
+            <hr class="hr-gray-100">
+            
+          </div>
+        </div>
+      </div>
+
+
+      <div class="tabs-custom tabs-horizontal tabs-line" id="tabs-1">
+        <!-- Nav tabs-->
+        <div class="nav-tabs-wrap">
+          <ul class="nav nav-tabs nav-tabs-1">
+            <li class="nav-item" role="presentation"><a class="nav-link active" href="#tabs-1-1" data-bs-toggle="tab">Izohlar</a></li>
+            <li class="nav-item" role="presentation"><a class="nav-link" href="#tabs-1-2" data-bs-toggle="tab">Qo'shimcha ma'lumot</a></li>
+            <li class="nav-item" role="presentation"><a class="nav-link" href="#tabs-1-3" data-bs-toggle="tab">Buyurtma and To'lov</a></li>
+          </ul>
+        </div>
+        <!-- Tab panes-->
+        <div class="tab-content tab-content-1">
+          <div class="tab-pane fade show active" id="tabs-1-1">
+            {% for review in food.reviews.all %}
+            <div class="box-comment">
+              <div class="unit flex-column flex-sm-row unit-spacing-md">
+                <div class="unit-left"><a class="box-comment-figure"  href="#"><img src="{{ review.user.profile_image.url }}" alt="" width="100" height="100"></a></div>
+                <div class="unit-body">
+                  <div class="group-sm group-justify">
+                    <div>
+                      <div class="group-xs group-middle">
+                        <h5 class="box-comment-author"><a href="#">{{ review.user.username }}</a></h5>
+                        {% if review.stars_given == 1 %}
+                            <div class="box-rating"><span class="icon mdi mdi-star"></span></div>
+                        {% elif review.stars_given == 2 %}
+                        <div class="box-rating"><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span></div>
+                        {% elif review.stars_given == 3 %}
+                        <div class="box-rating"><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span></div>
+                        {% elif review.stars_given == 4 %}
+                        <div class="box-rating"><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span></div>
+                        {% elif review.stars_given == 5 %}
+                        <div class="box-rating"><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span><span class="icon mdi mdi-star"></span></div>
+                        {% else %}
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="box-comment-time">
+                      <time datetime="2022-11-30">{{ review.created_at|date:"F d, Y" }}</time>
+                    </div>
+                  </div>
+                  <p class="box-comment-text">{{review.comment}}</p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+            <h4 class="text-transform-none fw-medium">Izoh qoldirish</h4>
+
+            <form class="rd-form " method="post" action="{% url 'food:add_comment' food.id %}">
+                {% csrf_token %}
+                <div class="row row-20 row-md-30">
+                <div class="col-lg-8">
+                  <div class="row row-20 row-md-30">
+                    <div class="col-sm-6">
+                      <div class="form-wrap">
+                        <input class="form-input" id="contact-first-name-2" type="text" name="stars_given" >
+                        <label class="form-label" for="contact-first-name-2">Baholang</label>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-wrap">
+                    <label class="form-label" for="contact-message-2">Izoh qoldiring</label>
+                    <textarea class="form-input textarea-lg" id="contact-message-2" name="comment" ></textarea>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+          </div>
+
+          <div class="tab-pane fade" id="tabs-1-2">
+            <div class="single-product-info">
+              <div class="unit unit-spacing-md flex-column flex-sm-row align-items-sm-center">
+                <div class="unit-left"><span class="icon icon-80 mdi mdi-information-outline"></span></div>
+                <div class="unit-body">
+                  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tabs-1-3">
+            <div class="single-product-info">
+              <div class="unit unit-spacing-md flex-column flex-sm-row align-items-sm-center">
+                <div class="unit-left"><span class="icon icon-80 mdi mdi-truck-delivery"></span></div>
+                <div class="unit-body">
+                  <p>c auctor augue mauris augue neque gravida. Vitae sapien pellentesque habitant morbi tristique senectus et. Vitae auctor eu augue ut lectus. Congue eu consequat ac felis. Aliquam sem fringilla ut morbi tincidunt augue interdum velit euismod. Ut venenatis tellus in metus. Felis eget nunc lobortis mattis aliquam faucibus purus in massa. Gravida dictum fusce ut placerat orci nulla pellentesque.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Products-->
+  <section class="section section-sm section-last bg-default">
+    <div class="container">
+      <h4 class="fw-sbold">Menyu</h4>
+      <div class="row row-lg row-30 row-lg-50 justify-content-center">
+        {% for m in meals %}
+        <div class="col-sm-6 col-md-5 col-lg-3">
+          <!-- Product-->
+          <article class="product">
+            <div class="product-body">
+              <div class="product-figure"><img src="{{m.image.url}}" alt="" width="220" height="160">
+              </div>
+              <h5 class="product-title"><a href="single-product.html">{{m.name}}</a></h5>
+              <div class="product-price-wrap">
+              
+                <div class="product-price">{{m.price}} so'm</div>
+              </div>
+            </div>
+            <div class="product-button-wrap">
+              <div class="product-button"><button value="{{m.id}}" class="button button-secondary button-zakaria like-button" >❤</button></div>
+              
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+        
+        
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.like-button').click(function() {
+            var mealId = $(this).val(); // Получаем идентификатор блюда
+            $.ajax({
+                type: 'POST',
+                url: '/add_to_favorites/', // URL-адрес вашего представления для добавления в избранное
+                data: {
+                    'meal_id': mealId,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function(response) {
+                    alert('Блюдо добавлено в избранное!');
+                },
+                error: function(xhr, status, error) {
+                    alert('Произошла ошибка: ' + error);
+                }
+            });
+        });
+    });
+</script>
+
